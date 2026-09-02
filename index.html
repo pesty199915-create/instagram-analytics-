@@ -552,6 +552,91 @@
         }
 
         /* =========================================================
+           ACCOUNT ACTIONS
+        ========================================================= */
+
+        .account-actions {
+            display: flex;
+
+            gap: 9px;
+
+            margin-top: 10px;
+        }
+
+        .account-action-btn {
+            flex: 1;
+
+            padding: 11px 13px;
+
+            border-radius: 10px;
+
+            border:
+                1px solid rgba(255, 255, 255, 0.07);
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(20, 23, 34, 0.95),
+                    rgba(10, 12, 19, 0.98)
+                );
+
+            color: #aeb7c7;
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            transition:
+                all .25s ease;
+        }
+
+        .account-action-btn:hover {
+            color: #fff;
+
+            border-color:
+                rgba(0, 229, 255, 0.30);
+
+            box-shadow:
+                0 0 18px rgba(0, 229, 255, 0.08);
+
+            transform: translateY(-1px);
+        }
+
+        .account-action-btn.delete {
+            color: #ff8f9b;
+
+            border-color:
+                rgba(255, 70, 90, 0.14);
+        }
+
+        .account-action-btn.delete:hover {
+            color: #fff;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(130, 20, 35, 0.55),
+                    rgba(55, 10, 18, 0.65)
+                );
+
+            border-color:
+                rgba(255, 70, 90, 0.40);
+
+            box-shadow:
+                0 0 20px rgba(255, 50, 70, 0.10);
+        }
+
+        .account-action-btn:disabled {
+            opacity: .3;
+
+            cursor: not-allowed;
+
+            transform: none;
+        }
+
+        /* =========================================================
            CARDS
         ========================================================= */
 
@@ -1357,6 +1442,244 @@
         }
 
         /* =========================================================
+           MODAIS
+        ========================================================= */
+
+        .modal-overlay {
+            position: fixed;
+
+            inset: 0;
+
+            display: none;
+
+            align-items: center;
+            justify-content: center;
+
+            padding: 20px;
+
+            background:
+                rgba(2, 3, 7, 0.78);
+
+            backdrop-filter:
+                blur(12px);
+
+            z-index: 1000;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal {
+            position: relative;
+
+            width: min(100%, 460px);
+
+            padding: 25px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(18, 21, 32, 0.98),
+                    rgba(7, 9, 15, 0.99)
+                );
+
+            border:
+                1px solid rgba(0, 229, 255, 0.16);
+
+            border-radius: 18px;
+
+            box-shadow:
+                0 30px 100px rgba(0, 0, 0, 0.65),
+                0 0 40px rgba(0, 229, 255, 0.05);
+
+            animation:
+                modalIn .25s ease;
+        }
+
+        .modal.danger {
+            border-color:
+                rgba(255, 70, 90, 0.22);
+        }
+
+        .modal-title {
+            margin-bottom: 9px;
+
+            color: #fff;
+
+            font-size: 17px;
+
+            font-weight: 800;
+        }
+
+        .modal-description {
+            margin-bottom: 20px;
+
+            color: #7f8797;
+
+            font-size: 12px;
+
+            line-height: 1.6;
+        }
+
+        .modal-input {
+            width: 100%;
+
+            padding: 13px 14px;
+
+            margin-bottom: 13px;
+
+            color: #fff;
+
+            background:
+                rgba(5, 7, 12, 0.85);
+
+            border:
+                1px solid rgba(255, 255, 255, 0.08);
+
+            border-radius: 10px;
+
+            outline: none;
+
+            font-size: 12px;
+        }
+
+        .modal-input:focus {
+            border-color:
+                rgba(0, 229, 255, 0.40);
+
+            box-shadow:
+                0 0 0 3px rgba(0, 229, 255, 0.05);
+        }
+
+        .modal-warning {
+            padding: 12px;
+
+            margin-bottom: 17px;
+
+            color: #ffadb5;
+
+            background:
+                rgba(255, 50, 70, 0.06);
+
+            border:
+                1px solid rgba(255, 50, 70, 0.12);
+
+            border-radius: 9px;
+
+            font-size: 11px;
+
+            line-height: 1.5;
+        }
+
+        .modal-buttons {
+            display: flex;
+
+            gap: 9px;
+        }
+
+        .modal-btn {
+            flex: 1;
+
+            padding: 12px;
+
+            border-radius: 10px;
+
+            border:
+                1px solid rgba(255, 255, 255, 0.08);
+
+            background:
+                rgba(255, 255, 255, 0.035);
+
+            color: #cbd2df;
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            transition: .2s ease;
+        }
+
+        .modal-btn:hover {
+            border-color:
+                rgba(255, 255, 255, 0.16);
+
+            color: #fff;
+        }
+
+        .modal-btn.primary {
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(0, 180, 210, 0.22),
+                    rgba(59, 130, 246, 0.20)
+                );
+
+            border-color:
+                rgba(0, 229, 255, 0.22);
+
+            color: #dffcff;
+        }
+
+        .modal-btn.danger {
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(180, 25, 45, 0.30),
+                    rgba(90, 10, 25, 0.35)
+                );
+
+            border-color:
+                rgba(255, 70, 90, 0.25);
+
+            color: #ffd8dc;
+        }
+
+        .modal-btn:disabled {
+            opacity: .4;
+            cursor: not-allowed;
+        }
+
+        .modal-close {
+            position: absolute;
+
+            right: 17px;
+            top: 14px;
+
+            width: 30px;
+            height: 30px;
+
+            border: 0;
+
+            background: transparent;
+
+            color: #687082;
+
+            font-size: 18px;
+
+            cursor: pointer;
+        }
+
+        .modal-close:hover {
+            color: #fff;
+        }
+
+        @keyframes modalIn {
+
+            from {
+                opacity: 0;
+                transform: translateY(10px) scale(.98);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* =========================================================
            ANIMATIONS
         ========================================================= */
 
@@ -1513,6 +1836,14 @@
                 left: 12px;
                 bottom: 12px;
             }
+
+            .account-actions {
+                flex-direction: column;
+            }
+
+            .modal {
+                padding: 21px;
+            }
         }
 
         @media (max-width: 400px) {
@@ -1618,6 +1949,28 @@
             </option>
 
         </select>
+
+
+        <div class="account-actions">
+
+            <button
+                type="button"
+                class="account-action-btn"
+                id="githubSettingsBtn"
+            >
+                ⚙ GitHub
+            </button>
+
+            <button
+                type="button"
+                class="account-action-btn delete"
+                id="deleteAccountBtn"
+                disabled
+            >
+                🗑 Excluir conta
+            </button>
+
+        </div>
 
     </div>
 
@@ -1926,8 +2279,6 @@
         </div>
 
 
-        <!-- PAGINAÇÃO -->
-
         <div class="pagination">
 
             <button
@@ -1970,6 +2321,146 @@
 ></div>
 
 
+<!-- =========================================================
+     MODAL GITHUB
+========================================================== -->
+
+<div
+    class="modal-overlay"
+    id="githubModal"
+>
+
+    <div class="modal">
+
+        <button
+            type="button"
+            class="modal-close"
+            id="githubModalClose"
+        >
+            ×
+        </button>
+
+        <div class="modal-title">
+            Configurar GitHub
+        </div>
+
+        <div class="modal-description">
+
+            Configure o token uma única vez.
+            Ele ficará salvo neste navegador para que
+            o dashboard possa excluir contas diretamente
+            do GitHub.
+
+        </div>
+
+        <div class="modal-warning">
+
+            Use um token do GitHub limitado a este
+            repositório com permissão de
+            <strong>Contents: Read and Write</strong>.
+
+        </div>
+
+        <input
+            type="password"
+            id="githubTokenInput"
+            class="modal-input"
+            placeholder="Cole seu token do GitHub"
+            autocomplete="off"
+        >
+
+        <div class="modal-buttons">
+
+            <button
+                type="button"
+                class="modal-btn"
+                id="githubModalCancel"
+            >
+                Cancelar
+            </button>
+
+            <button
+                type="button"
+                class="modal-btn primary"
+                id="githubSaveBtn"
+            >
+                Salvar token
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     MODAL EXCLUSÃO
+========================================================== -->
+
+<div
+    class="modal-overlay"
+    id="deleteModal"
+>
+
+    <div class="modal danger">
+
+        <button
+            type="button"
+            class="modal-close"
+            id="deleteModalClose"
+        >
+            ×
+        </button>
+
+        <div class="modal-title">
+            Excluir conta
+        </div>
+
+        <div
+            class="modal-description"
+            id="deleteDescription"
+        >
+            Tem certeza que deseja excluir esta conta?
+        </div>
+
+        <div class="modal-warning">
+
+            ⚠️ Esta ação removerá permanentemente do
+            GitHub o arquivo JSON, o arquivo CSV e a
+            conta do <strong>config.json</strong>.
+
+            <br><br>
+
+            Esta ação não pode ser desfeita pelo dashboard.
+
+        </div>
+
+        <div class="modal-buttons">
+
+            <button
+                type="button"
+                class="modal-btn"
+                id="deleteModalCancel"
+            >
+                Cancelar
+            </button>
+
+            <button
+                type="button"
+                class="modal-btn danger"
+                id="confirmDeleteBtn"
+            >
+                Excluir definitivamente
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
 <script>
 
     /* =====================================================
@@ -2002,6 +2493,26 @@
 
 
     /* =====================================================
+       GITHUB
+    ===================================================== */
+
+    const GITHUB_OWNER =
+        "pesty199915-create";
+
+    const GITHUB_REPO =
+        "instagram-analytics-";
+
+    const GITHUB_BRANCH =
+        "main";
+
+    const GITHUB_API =
+        `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents`;
+
+    const STORAGE_KEY_GITHUB_TOKEN =
+        "instagramAnalyticsGithubToken";
+
+
+    /* =====================================================
        ELEMENTOS
     ===================================================== */
 
@@ -2031,6 +2542,47 @@
         );
 
 
+    const githubSettingsBtn =
+        document.getElementById(
+            "githubSettingsBtn"
+        );
+
+    const deleteAccountBtn =
+        document.getElementById(
+            "deleteAccountBtn"
+        );
+
+    const githubModal =
+        document.getElementById(
+            "githubModal"
+        );
+
+    const deleteModal =
+        document.getElementById(
+            "deleteModal"
+        );
+
+    const githubTokenInput =
+        document.getElementById(
+            "githubTokenInput"
+        );
+
+    const githubSaveBtn =
+        document.getElementById(
+            "githubSaveBtn"
+        );
+
+    const deleteDescription =
+        document.getElementById(
+            "deleteDescription"
+        );
+
+    const confirmDeleteBtn =
+        document.getElementById(
+            "confirmDeleteBtn"
+        );
+
+
     /* =====================================================
        STATUS
     ===================================================== */
@@ -2056,6 +2608,970 @@
             );
 
         }, 3000);
+    }
+
+
+    /* =====================================================
+       TOKEN GITHUB
+    ===================================================== */
+
+    function obterGithubToken() {
+
+        try {
+
+            return (
+                localStorage.getItem(
+                    STORAGE_KEY_GITHUB_TOKEN
+                ) || ""
+            ).trim();
+
+        }
+
+        catch (erro) {
+
+            console.warn(
+                "Não foi possível acessar o token do GitHub:",
+                erro
+            );
+
+            return "";
+        }
+    }
+
+
+    /* =====================================================
+       HEADERS GITHUB
+    ===================================================== */
+
+    function githubHeaders() {
+
+        const token =
+            obterGithubToken();
+
+
+        if (!token) {
+
+            throw new Error(
+                "Token do GitHub não configurado."
+            );
+        }
+
+
+        return {
+
+            "Authorization":
+                `Bearer ${token}`,
+
+            "Accept":
+                "application/vnd.github+json",
+
+            "X-GitHub-Api-Version":
+                "2022-11-28"
+
+        };
+    }
+
+
+    /* =====================================================
+       REQUEST GITHUB
+    ===================================================== */
+
+    async function githubRequest(
+        url,
+        options = {}
+    ) {
+
+        const response =
+            await fetch(
+                url,
+                {
+                    ...options,
+
+                    headers: {
+
+                        ...githubHeaders(),
+
+                        ...(options.headers || {})
+
+                    }
+                }
+            );
+
+
+        if (
+            response.status === 401
+        ) {
+
+            throw new Error(
+                "Token do GitHub inválido ou expirado."
+            );
+        }
+
+
+        if (
+            response.status === 403
+        ) {
+
+            throw new Error(
+                "GitHub recusou a operação. Verifique as permissões do token."
+            );
+        }
+
+
+        let dados = null;
+
+
+        try {
+
+            dados =
+                await response.json();
+
+        }
+
+        catch (e) {
+
+            // resposta sem JSON
+
+        }
+
+
+        if (
+            !response.ok
+        ) {
+
+            throw new Error(
+                dados?.message ||
+                `Erro GitHub HTTP ${response.status}`
+            );
+        }
+
+
+        return dados;
+    }
+
+
+    /* =====================================================
+       GET ARQUIVO GITHUB
+    ===================================================== */
+
+    async function githubGetFile(
+        caminho
+    ) {
+
+        const url =
+            `${GITHUB_API}/${encodeURIComponent(caminho)}` +
+            `?ref=${encodeURIComponent(GITHUB_BRANCH)}` +
+            `&_=${Date.now()}`;
+
+
+        const response =
+            await fetch(
+                url,
+                {
+                    headers:
+                        githubHeaders()
+                }
+            );
+
+
+        if (
+            response.status === 404
+        ) {
+
+            return null;
+        }
+
+
+        if (
+            response.status === 401
+        ) {
+
+            throw new Error(
+                "Token do GitHub inválido ou expirado."
+            );
+        }
+
+
+        if (
+            response.status === 403
+        ) {
+
+            throw new Error(
+                "Sem permissão para acessar o repositório."
+            );
+        }
+
+
+        if (
+            !response.ok
+        ) {
+
+            let mensagem =
+                `Erro ao acessar ${caminho}`;
+
+            try {
+
+                const erro =
+                    await response.json();
+
+                mensagem =
+                    erro.message ||
+                    mensagem;
+
+            }
+
+            catch (e) {}
+
+            throw new Error(
+                mensagem
+            );
+        }
+
+
+        return await response.json();
+    }
+
+
+    /* =====================================================
+       BASE64 UTF-8
+    ===================================================== */
+
+    function base64DecodeUtf8(
+        base64
+    ) {
+
+        const bytes =
+            Uint8Array.from(
+                atob(
+                    base64.replace(
+                        /\s/g,
+                        ""
+                    )
+                ),
+                c =>
+                    c.charCodeAt(0)
+            );
+
+
+        return new TextDecoder()
+            .decode(bytes);
+    }
+
+
+    function base64EncodeUtf8(
+        texto
+    ) {
+
+        return btoa(
+
+            new TextEncoder()
+                .encode(texto)
+                .reduce(
+                    (
+                        data,
+                        byte
+                    ) =>
+                        data +
+                        String.fromCharCode(
+                            byte
+                        ),
+                    ""
+                )
+
+        );
+    }
+
+
+    /* =====================================================
+       EXCLUIR ARQUIVO GITHUB
+    ===================================================== */
+
+    async function excluirArquivoGithub(
+        caminho,
+        mensagem
+    ) {
+
+        const arquivo =
+            await githubGetFile(
+                caminho
+            );
+
+
+        if (!arquivo) {
+
+            return {
+
+                skipped: true
+
+            };
+        }
+
+
+        return await githubRequest(
+
+            `${GITHUB_API}/${encodeURIComponent(caminho)}`,
+
+            {
+
+                method:
+                    "DELETE",
+
+                body:
+                    JSON.stringify({
+
+                        message:
+                            mensagem,
+
+                        sha:
+                            arquivo.sha,
+
+                        branch:
+                            GITHUB_BRANCH
+
+                    })
+
+            }
+
+        );
+    }
+
+
+    /* =====================================================
+       NORMALIZAR PERFIL
+    ===================================================== */
+
+    function normalizarPerfilGithub(
+        perfil
+    ) {
+
+        return String(
+            perfil || ""
+        )
+            .replace(
+                /^@/,
+                ""
+            )
+            .trim();
+    }
+
+
+    /* =====================================================
+       VALIDAR PERFIL
+    ===================================================== */
+
+    function validarPerfilGithub(
+        perfil
+    ) {
+
+        return /^[A-Za-z0-9._-]+$/
+            .test(
+                perfil
+            );
+    }
+
+
+    /* =====================================================
+       REMOVER CONTA DO CONFIG.JSON
+    ===================================================== */
+
+    async function removerContaDoConfig(
+        perfil
+    ) {
+
+        const configArquivo =
+            await githubGetFile(
+                "config.json"
+            );
+
+
+        if (!configArquivo) {
+
+            throw new Error(
+                "config.json não foi encontrado no GitHub."
+            );
+        }
+
+
+        const texto =
+            base64DecodeUtf8(
+                configArquivo.content
+            );
+
+
+        let dadosConfig;
+
+
+        try {
+
+            dadosConfig =
+                JSON.parse(
+                    texto
+                );
+
+        }
+
+        catch (erro) {
+
+            throw new Error(
+                "O config.json possui JSON inválido."
+            );
+        }
+
+
+        const perfilNormalizado =
+            normalizarPerfilGithub(
+                perfil
+            ).toLowerCase();
+
+
+        let removido = false;
+
+
+        /* =================================================
+           ARRAY DE CONTAS
+        ================================================= */
+
+        if (
+            Array.isArray(
+                dadosConfig.contas
+            )
+        ) {
+
+            const quantidadeAntes =
+                dadosConfig.contas.length;
+
+
+            dadosConfig.contas =
+                dadosConfig.contas.filter(
+                    conta => {
+
+                        const perfilConta =
+                            normalizarPerfilGithub(
+                                conta.perfil
+                            ).toLowerCase();
+
+
+                        const deveRemover =
+                            perfilConta ===
+                            perfilNormalizado;
+
+
+                        if (
+                            deveRemover
+                        ) {
+
+                            removido =
+                                true;
+
+                            return false;
+                        }
+
+
+                        return true;
+
+                    }
+                );
+
+
+            if (
+                dadosConfig.contas.length ===
+                quantidadeAntes
+            ) {
+
+                removido = false;
+            }
+
+        }
+
+        else {
+
+            /* =============================================
+               CONFIG LEGADO
+            ============================================= */
+
+            const perfilAtual =
+                normalizarPerfilGithub(
+                    dadosConfig.perfil ||
+                    dadosConfig.usuario ||
+                    ""
+                ).toLowerCase();
+
+
+            if (
+                perfilAtual ===
+                perfilNormalizado
+            ) {
+
+                dadosConfig = {
+
+                    contas: []
+
+                };
+
+                removido = true;
+            }
+
+        }
+
+
+        if (!removido) {
+
+            return {
+
+                alterado: false
+
+            };
+        }
+
+
+        const novoConteudo =
+            JSON.stringify(
+                dadosConfig,
+                null,
+                2
+            ) +
+            "\n";
+
+
+        return await githubRequest(
+
+            `${GITHUB_API}/config.json`,
+
+            {
+
+                method:
+                    "PUT",
+
+                body:
+                    JSON.stringify({
+
+                        message:
+                            `Remover conta @${perfil} do config.json`,
+
+                        content:
+                            base64EncodeUtf8(
+                                novoConteudo
+                            ),
+
+                        sha:
+                            configArquivo.sha,
+
+                        branch:
+                            GITHUB_BRANCH
+
+                    })
+
+            }
+
+        );
+    }
+
+
+    /* =====================================================
+       EXCLUIR CONTA COMPLETA
+    ===================================================== */
+
+    async function excluirContaGithub(
+        perfil
+    ) {
+
+        perfil =
+            normalizarPerfilGithub(
+                perfil
+            );
+
+
+        if (!perfil) {
+
+            throw new Error(
+                "Conta inválida."
+            );
+        }
+
+
+        if (
+            !validarPerfilGithub(
+                perfil
+            )
+        ) {
+
+            throw new Error(
+                "Nome de conta inválido."
+            );
+        }
+
+
+        const json =
+            `${perfil}_reels.json`;
+
+        const csv =
+            `${perfil}_reels.csv`;
+
+
+        let jsonResultado = null;
+
+        let csvResultado = null;
+
+        let configResultado = null;
+
+
+        /* =================================================
+           JSON
+        ================================================= */
+
+        jsonResultado =
+            await excluirArquivoGithub(
+
+                json,
+
+                `Excluir dados da conta @${perfil} - JSON`
+
+            );
+
+
+        /* =================================================
+           CSV
+        ================================================= */
+
+        csvResultado =
+            await excluirArquivoGithub(
+
+                csv,
+
+                `Excluir dados da conta @${perfil} - CSV`
+
+            );
+
+
+        /* =================================================
+           CONFIG
+        ================================================= */
+
+        configResultado =
+            await removerContaDoConfig(
+                perfil
+            );
+
+
+        return {
+
+            json:
+                jsonResultado,
+
+            csv:
+                csvResultado,
+
+            config:
+                configResultado
+
+        };
+    }
+
+
+    /* =====================================================
+       MODAL GITHUB
+    ===================================================== */
+
+    function abrirGithubModal() {
+
+        const token =
+            obterGithubToken();
+
+
+        githubTokenInput.value =
+            token;
+
+
+        githubModal.classList.add(
+            "show"
+        );
+
+
+        setTimeout(
+            () => {
+
+                githubTokenInput.focus();
+
+            },
+            100
+        );
+    }
+
+
+    function fecharGithubModal() {
+
+        githubModal.classList.remove(
+            "show"
+        );
+    }
+
+
+    /* =====================================================
+       MODAL EXCLUSÃO
+    ===================================================== */
+
+    let contaParaExcluir = null;
+
+
+    function abrirDeleteModal() {
+
+        const conta =
+            accountSelect.value;
+
+
+        if (
+            !conta ||
+            conta === "__all__"
+        ) {
+
+            mostrarStatus(
+                "Selecione uma conta específica."
+            );
+
+            return;
+        }
+
+
+        const token =
+            obterGithubToken();
+
+
+        if (!token) {
+
+            mostrarStatus(
+                "Configure o token do GitHub primeiro."
+            );
+
+
+            abrirGithubModal();
+
+            return;
+        }
+
+
+        contaParaExcluir =
+            normalizarPerfilGithub(
+                conta
+            );
+
+
+        deleteDescription.textContent =
+            `Tem certeza que deseja excluir @${contaParaExcluir}? ` +
+            `Isso removerá o JSON, o CSV e a conta do config.json do GitHub. ` +
+            `Esta ação não poderá ser desfeita.`;
+
+
+        deleteModal.classList.add(
+            "show"
+        );
+    }
+
+
+    function fecharDeleteModal() {
+
+        deleteModal.classList.remove(
+            "show"
+        );
+
+
+        contaParaExcluir =
+            null;
+    }
+
+
+    /* =====================================================
+       ATUALIZAR BOTÃO EXCLUIR
+    ===================================================== */
+
+    function atualizarBotaoExcluir() {
+
+        const conta =
+            accountSelect.value;
+
+
+        deleteAccountBtn.disabled =
+            !conta ||
+            conta === "__all__";
+    }
+
+
+    /* =====================================================
+       SALVAR TOKEN
+    ===================================================== */
+
+    async function salvarGithubToken() {
+
+        const token =
+            githubTokenInput.value.trim();
+
+
+        if (!token) {
+
+            mostrarStatus(
+                "Informe o token do GitHub."
+            );
+
+            return;
+        }
+
+
+        githubSaveBtn.disabled =
+            true;
+
+        githubSaveBtn.textContent =
+            "Validando...";
+
+
+        try {
+
+            localStorage.setItem(
+                STORAGE_KEY_GITHUB_TOKEN,
+                token
+            );
+
+
+            await githubGetFile(
+                "config.json"
+            );
+
+
+            fecharGithubModal();
+
+
+            mostrarStatus(
+                "Token do GitHub configurado."
+            );
+
+        }
+
+        catch (erro) {
+
+            localStorage.removeItem(
+                STORAGE_KEY_GITHUB_TOKEN
+            );
+
+
+            mostrarStatus(
+                erro.message ||
+                "Token inválido."
+            );
+
+        }
+
+        finally {
+
+            githubSaveBtn.disabled =
+                false;
+
+            githubSaveBtn.textContent =
+                "Salvar token";
+        }
+    }
+
+
+    /* =====================================================
+       CONFIRMAR EXCLUSÃO
+    ===================================================== */
+
+    async function confirmarExclusaoConta() {
+
+        if (
+            !contaParaExcluir
+        ) {
+
+            return;
+        }
+
+
+        const perfil =
+            contaParaExcluir;
+
+
+        confirmDeleteBtn.disabled =
+            true;
+
+        confirmDeleteBtn.textContent =
+            "Excluindo...";
+
+
+        try {
+
+            mostrarStatus(
+                `Excluindo @${perfil} do GitHub...`
+            );
+
+
+            await excluirContaGithub(
+                perfil
+            );
+
+
+            /* =============================================
+               LIMPAR CONTA SALVA
+            ============================================= */
+
+            try {
+
+                localStorage.removeItem(
+                    STORAGE_KEY_CONTA
+                );
+
+            }
+
+            catch (erro) {
+
+                console.warn(
+                    "Não foi possível limpar a conta salva:",
+                    erro
+                );
+            }
+
+
+            fecharDeleteModal();
+
+
+            mostrarStatus(
+                `@${perfil} excluída com sucesso.`
+            );
+
+
+            /*
+             * Recarrega os dados do GitHub.
+             */
+
+            setTimeout(
+                () => {
+
+                    carregar();
+
+                },
+                700
+            );
+
+        }
+
+        catch (erro) {
+
+            console.error(
+                "Erro ao excluir conta:",
+                erro
+            );
+
+
+            mostrarStatus(
+                `Erro: ${erro.message}`
+            );
+
+        }
+
+        finally {
+
+            confirmDeleteBtn.disabled =
+                false;
+
+            confirmDeleteBtn.textContent =
+                "Excluir definitivamente";
+        }
     }
 
 
@@ -2500,11 +4016,6 @@
             contas.length === 1
         ) {
 
-            /*
-             * Se existir somente uma conta,
-             * seleciona ela automaticamente.
-             */
-
             accountSelect.value =
                 contas[0];
 
@@ -2535,6 +4046,8 @@
 
         }
 
+
+        atualizarBotaoExcluir();
     }
 
 
@@ -3453,6 +4966,10 @@
 
                 </tr>
             `;
+
+            atualizarPaginacao();
+
+            return;
         }
 
 
@@ -4189,10 +5706,6 @@
             paginaAtual = 1;
 
 
-            /* =================================================
-               SALVAR ÚLTIMA CONTA SELECIONADA
-            ================================================= */
-
             try {
 
                 localStorage.setItem(
@@ -4210,6 +5723,8 @@
                 );
             }
 
+
+            atualizarBotaoExcluir();
 
             aplicarFiltros();
 
@@ -4238,6 +5753,154 @@
     sortFilter.addEventListener(
         "change",
         aplicarFiltros
+    );
+
+
+    /* =====================================================
+       BOTÃO GITHUB
+    ===================================================== */
+
+    githubSettingsBtn.addEventListener(
+        "click",
+        abrirGithubModal
+    );
+
+
+    /* =====================================================
+       BOTÃO EXCLUIR
+    ===================================================== */
+
+    deleteAccountBtn.addEventListener(
+        "click",
+        abrirDeleteModal
+    );
+
+
+    /* =====================================================
+       SALVAR TOKEN
+    ===================================================== */
+
+    githubSaveBtn.addEventListener(
+        "click",
+        salvarGithubToken
+    );
+
+
+    /* =====================================================
+       FECHAR MODAL GITHUB
+    ===================================================== */
+
+    document
+        .getElementById(
+            "githubModalClose"
+        )
+        .addEventListener(
+            "click",
+            fecharGithubModal
+        );
+
+
+    document
+        .getElementById(
+            "githubModalCancel"
+        )
+        .addEventListener(
+            "click",
+            fecharGithubModal
+        );
+
+
+    /* =====================================================
+       FECHAR MODAL EXCLUSÃO
+    ===================================================== */
+
+    document
+        .getElementById(
+            "deleteModalClose"
+        )
+        .addEventListener(
+            "click",
+            fecharDeleteModal
+        );
+
+
+    document
+        .getElementById(
+            "deleteModalCancel"
+        )
+        .addEventListener(
+            "click",
+            fecharDeleteModal
+        );
+
+
+    /* =====================================================
+       CONFIRMAR EXCLUSÃO
+    ===================================================== */
+
+    confirmDeleteBtn.addEventListener(
+        "click",
+        confirmarExclusaoConta
+    );
+
+
+    /* =====================================================
+       FECHAR CLICANDO FORA
+    ===================================================== */
+
+    githubModal.addEventListener(
+        "click",
+        event => {
+
+            if (
+                event.target ===
+                githubModal
+            ) {
+
+                fecharGithubModal();
+
+            }
+
+        }
+    );
+
+
+    deleteModal.addEventListener(
+        "click",
+        event => {
+
+            if (
+                event.target ===
+                deleteModal
+            ) {
+
+                fecharDeleteModal();
+
+            }
+
+        }
+    );
+
+
+    /* =====================================================
+       ESC FECHA MODAL
+    ===================================================== */
+
+    document.addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key === "Escape"
+            ) {
+
+                fecharGithubModal();
+
+                fecharDeleteModal();
+
+            }
+
+        }
     );
 
 
@@ -4411,10 +6074,10 @@
                                         };
 
 
-                                        /* =================================================
+                                        /* =============================================
                                            SE O JSON NÃO TIVER USUÁRIO,
                                            USA O PERFIL DO CONFIG.JSON
-                                        ================================================= */
+                                        ============================================= */
 
                                         if (
                                             !copia.usuario &&
@@ -4484,6 +6147,13 @@
             ================================================= */
 
             carregarHoras();
+
+
+            /* =================================================
+               BOTÃO EXCLUIR
+            ================================================= */
+
+            atualizarBotaoExcluir();
 
 
             /* =================================================
