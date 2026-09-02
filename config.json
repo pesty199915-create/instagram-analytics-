@@ -1,0 +1,14 @@
+{
+  "contas": [
+    {
+      "perfil": "carla_ferreiratgs",
+      "arquivo_json": "carla_ferreiratgs_reels.json",
+      "arquivo_csv": "carla_ferreiratgs_reels.csv"
+    },
+    {
+      "perfil": "reindeer.7441086",
+      "arquivo_json": "reindeer.7441086_reels.json",
+      "arquivo_csv": "reindeer.7441086_reels.csv"
+    }
+  ]
+}

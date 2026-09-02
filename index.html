@@ -1,0 +1,4573 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Instagram Analytics</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        /* =========================================================
+           RESET
+        ========================================================= */
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg: #05060a;
+            --bg-2: #080a10;
+            --panel: rgba(13, 15, 23, 0.82);
+            --panel-2: rgba(18, 20, 30, 0.88);
+
+            --border: rgba(255, 255, 255, 0.07);
+            --border-light: rgba(255, 255, 255, 0.11);
+
+            --text: #f8fafc;
+            --muted: #8b92a3;
+            --muted-2: #5e6575;
+
+            --cyan: #00e5ff;
+            --blue: #3b82f6;
+            --purple: #8b5cf6;
+            --pink: #ec4899;
+
+            --radius: 18px;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            min-height: 100vh;
+            color: var(--text);
+
+            font-family:
+                Inter,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Roboto,
+                Arial,
+                sans-serif;
+
+            background:
+                radial-gradient(
+                    circle at 15% 10%,
+                    rgba(59, 130, 246, 0.12),
+                    transparent 28%
+                ),
+                radial-gradient(
+                    circle at 85% 15%,
+                    rgba(139, 92, 246, 0.11),
+                    transparent 28%
+                ),
+                radial-gradient(
+                    circle at 50% 90%,
+                    rgba(0, 229, 255, 0.06),
+                    transparent 30%
+                ),
+                var(--bg);
+
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+
+            position: fixed;
+            inset: 0;
+
+            pointer-events: none;
+            z-index: -1;
+
+            background-image:
+                linear-gradient(
+                    rgba(255, 255, 255, 0.018) 1px,
+                    transparent 1px
+                ),
+                linear-gradient(
+                    90deg,
+                    rgba(255, 255, 255, 0.018) 1px,
+                    transparent 1px
+                );
+
+            background-size: 45px 45px;
+
+            mask-image:
+                linear-gradient(
+                    to bottom,
+                    black,
+                    transparent 85%
+                );
+        }
+
+        body::after {
+            content: "";
+
+            position: fixed;
+
+            width: 450px;
+            height: 450px;
+
+            top: -200px;
+            left: 50%;
+
+            transform: translateX(-50%);
+
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(0, 229, 255, 0.08),
+                    transparent 70%
+                );
+
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        button,
+        input,
+        select {
+            font: inherit;
+        }
+
+        /* =========================================================
+           SCROLLBAR
+        ========================================================= */
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #08090d;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background:
+                linear-gradient(
+                    180deg,
+                    #3b82f6,
+                    #8b5cf6
+                );
+
+            border-radius: 20px;
+        }
+
+        ::selection {
+            background: rgba(0, 229, 255, 0.25);
+            color: #fff;
+        }
+
+        /* =========================================================
+           CONTAINER
+        ========================================================= */
+
+        .container {
+            width: min(94%, 1540px);
+
+            margin: 0 auto;
+
+            padding: 38px 0 70px;
+        }
+
+        /* =========================================================
+           HEADER
+        ========================================================= */
+
+        header {
+            position: relative;
+
+            display: flex;
+
+            justify-content: space-between;
+            align-items: center;
+
+            gap: 25px;
+            flex-wrap: wrap;
+
+            margin-bottom: 28px;
+
+            padding: 26px 28px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(18, 21, 32, 0.95),
+                    rgba(8, 10, 17, 0.92)
+                );
+
+            border: 1px solid var(--border-light);
+            border-radius: 22px;
+
+            box-shadow:
+                0 20px 60px rgba(0, 0, 0, 0.35),
+                inset 0 1px 0 rgba(255, 255, 255, 0.04);
+
+            overflow: hidden;
+
+            animation: fadeUp 0.6s ease both;
+        }
+
+        header::before {
+            content: "";
+
+            position: absolute;
+
+            left: 0;
+            top: 0;
+
+            width: 100%;
+            height: 2px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    var(--cyan),
+                    var(--blue),
+                    var(--purple),
+                    transparent
+                );
+
+            opacity: 0.9;
+        }
+
+        header::after {
+            content: "";
+
+            position: absolute;
+
+            width: 180px;
+            height: 180px;
+
+            right: -80px;
+            top: -100px;
+
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(139, 92, 246, 0.18),
+                    transparent 70%
+                );
+
+            pointer-events: none;
+        }
+
+        .logo-area {
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo-area h1 {
+            display: flex;
+
+            align-items: center;
+            gap: 12px;
+
+            font-size: clamp(23px, 3vw, 30px);
+
+            font-weight: 800;
+
+            letter-spacing: -0.7px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #ffffff,
+                    #b9f8ff,
+                    #a78bfa
+                );
+
+            -webkit-background-clip: text;
+            background-clip: text;
+
+            color: transparent;
+        }
+
+        .logo-area h1::before {
+            content: "";
+
+            width: 11px;
+            height: 11px;
+
+            border-radius: 50%;
+
+            background: var(--cyan);
+
+            box-shadow:
+                0 0 8px var(--cyan),
+                0 0 20px rgba(0, 229, 255, 0.7);
+
+            animation: pulse 2s infinite;
+        }
+
+        .logo-area p {
+            color: var(--muted);
+
+            margin-top: 8px;
+
+            font-size: 13px;
+        }
+
+        .perfil {
+            position: relative;
+            z-index: 2;
+
+            display: inline-flex;
+
+            align-items: center;
+            gap: 9px;
+
+            padding: 11px 17px;
+
+            background: rgba(7, 9, 15, 0.75);
+
+            border: 1px solid rgba(0, 229, 255, 0.14);
+            border-radius: 12px;
+
+            color: var(--muted);
+
+            font-size: 13px;
+
+            box-shadow:
+                0 0 20px rgba(0, 229, 255, 0.04),
+                inset 0 1px 0 rgba(255, 255, 255, 0.03);
+
+            backdrop-filter: blur(15px);
+        }
+
+        .perfil strong {
+            color: #fff;
+
+            font-weight: 600;
+        }
+
+        /* =========================================================
+           ANIMATED NEON PANEL
+        ========================================================= */
+
+        .neon-panel {
+            position: relative;
+
+            isolation: isolate;
+
+            overflow: hidden;
+        }
+
+        .neon-panel::before {
+            content: "";
+
+            position: absolute;
+
+            inset: -1px;
+
+            border-radius: inherit;
+
+            background:
+                conic-gradient(
+                    from 0deg,
+                    transparent 0deg,
+                    transparent 45deg,
+                    rgba(0, 229, 255, 0.7) 80deg,
+                    rgba(59, 130, 246, 0.8) 125deg,
+                    rgba(139, 92, 246, 0.75) 180deg,
+                    transparent 220deg,
+                    transparent 360deg
+                );
+
+            animation: neonRotate 7s linear infinite;
+
+            z-index: -2;
+        }
+
+        .neon-panel::after {
+            content: "";
+
+            position: absolute;
+
+            inset: 1px;
+
+            border-radius:
+                calc(var(--radius) - 1px);
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(14, 17, 27, 0.97),
+                    rgba(8, 10, 16, 0.98)
+                );
+
+            z-index: -1;
+        }
+
+        /* =========================================================
+           ACCOUNT FILTER
+        ========================================================= */
+
+        .account-filter {
+            padding: 19px;
+
+            margin-bottom: 24px;
+
+            border-radius: var(--radius);
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(16, 18, 27, 0.94),
+                    rgba(9, 11, 18, 0.96)
+                );
+
+            border: 1px solid var(--border);
+
+            box-shadow:
+                0 16px 45px rgba(0, 0, 0, 0.25);
+
+            animation: fadeUp 0.65s 0.05s ease both;
+        }
+
+        .account-filter-top {
+            display: flex;
+
+            justify-content: space-between;
+            align-items: center;
+
+            gap: 15px;
+            flex-wrap: wrap;
+
+            margin-bottom: 12px;
+        }
+
+        .account-title {
+            display: flex;
+
+            align-items: center;
+            gap: 9px;
+
+            color: #aeb5c4;
+
+            font-size: 11px;
+            font-weight: 700;
+
+            letter-spacing: 1px;
+        }
+
+        .account-title::before {
+            content: "";
+
+            width: 7px;
+            height: 7px;
+
+            border-radius: 50%;
+
+            background: var(--purple);
+
+            box-shadow:
+                0 0 8px var(--purple);
+        }
+
+        .account-count {
+            color: var(--muted-2);
+
+            font-size: 11px;
+        }
+
+        /* =========================================================
+           SELETOR DE CONTAS
+        ========================================================= */
+
+        .account-select {
+            width: 100%;
+
+            padding: 14px 16px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(20, 24, 38, 0.98),
+                    rgba(14, 17, 28, 0.98)
+                );
+
+            color: #f8fafc;
+
+            border: 1px solid rgba(0, 229, 255, 0.18);
+
+            border-radius: 11px;
+
+            outline: none;
+
+            font-size: 13px;
+
+            font-weight: 600;
+
+            cursor: pointer;
+
+            color-scheme: dark;
+
+            transition:
+                border-color 0.25s ease,
+                box-shadow 0.25s ease,
+                background 0.25s ease;
+        }
+
+        .account-select:hover {
+            border-color:
+                rgba(0, 229, 255, 0.40);
+
+            box-shadow:
+                0 0 18px rgba(0, 229, 255, 0.07);
+        }
+
+        .account-select:focus {
+            border-color:
+                rgba(0, 229, 255, 0.60);
+
+            box-shadow:
+                0 0 0 3px rgba(0, 229, 255, 0.07),
+                0 0 22px rgba(0, 229, 255, 0.10);
+        }
+
+        .account-select option {
+            background: #0b0e16;
+
+            color: #f8fafc;
+
+            font-weight: 500;
+        }
+
+        .account-select option:checked {
+            background: #151b29;
+
+            color: #00e5ff;
+        }
+
+        /* =========================================================
+           CARDS
+        ========================================================= */
+
+        .cards {
+            display: grid;
+
+            grid-template-columns:
+                repeat(5, minmax(0, 1fr));
+
+            gap: 15px;
+
+            margin-bottom: 22px;
+        }
+
+        .card {
+            position: relative;
+
+            min-height: 128px;
+
+            padding: 20px;
+
+            border-radius: var(--radius);
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(17, 20, 30, 0.92),
+                    rgba(9, 11, 18, 0.97)
+                );
+
+            border: 1px solid var(--border);
+
+            overflow: hidden;
+
+            box-shadow:
+                0 15px 40px rgba(0, 0, 0, 0.22),
+                inset 0 1px 0 rgba(255, 255, 255, 0.025);
+
+            transition:
+                transform 0.3s ease,
+                border-color 0.3s ease,
+                box-shadow 0.3s ease;
+
+            animation: fadeUp 0.7s ease both;
+        }
+
+        .card:nth-child(1) {
+            animation-delay: .08s;
+        }
+
+        .card:nth-child(2) {
+            animation-delay: .12s;
+        }
+
+        .card:nth-child(3) {
+            animation-delay: .16s;
+        }
+
+        .card:nth-child(4) {
+            animation-delay: .20s;
+        }
+
+        .card:nth-child(5) {
+            animation-delay: .24s;
+        }
+
+        .card::before {
+            content: "";
+
+            position: absolute;
+
+            width: 130px;
+            height: 130px;
+
+            right: -75px;
+            bottom: -85px;
+
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(0, 229, 255, 0.13),
+                    transparent 70%
+                );
+
+            transition: 0.35s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+
+            border-color:
+                rgba(0, 229, 255, 0.24);
+
+            box-shadow:
+                0 20px 50px rgba(0, 0, 0, 0.34),
+                0 0 25px rgba(0, 229, 255, 0.055),
+                inset 0 1px 0 rgba(255, 255, 255, 0.04);
+        }
+
+        .card:hover::before {
+            transform: scale(1.4);
+        }
+
+        .card-title {
+            color: #737b8d;
+
+            font-size: 10px;
+
+            font-weight: 700;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1px;
+
+            margin-bottom: 11px;
+        }
+
+        .card-value {
+            position: relative;
+
+            z-index: 2;
+
+            font-size: 27px;
+
+            line-height: 1.1;
+
+            font-weight: 800;
+
+            letter-spacing: -0.5px;
+
+            color: #fff;
+
+            text-shadow:
+                0 0 18px rgba(255, 255, 255, 0.04);
+        }
+
+        .card-sub {
+            margin-top: 9px;
+
+            color: #515969;
+
+            font-size: 10px;
+        }
+
+        /* =========================================================
+           BEST TIME
+        ========================================================= */
+
+        .best-time {
+            margin-bottom: 25px !important;
+
+            min-height: 105px;
+
+            border-color:
+                rgba(139, 92, 246, 0.16);
+        }
+
+        .best-time::after {
+            content: "";
+
+            position: absolute;
+
+            right: -50px;
+            top: -80px;
+
+            width: 180px;
+            height: 180px;
+
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(139, 92, 246, 0.16),
+                    transparent 70%
+                );
+
+            pointer-events: none;
+        }
+
+        /* =========================================================
+           FILTERS
+        ========================================================= */
+
+        .filters {
+            display: grid;
+
+            grid-template-columns:
+                2fr 1fr 1fr 1fr;
+
+            gap: 11px;
+
+            padding: 17px;
+
+            margin-bottom: 25px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(15, 18, 27, 0.92),
+                    rgba(8, 10, 16, 0.96)
+                );
+
+            border: 1px solid var(--border);
+
+            border-radius: var(--radius);
+
+            box-shadow:
+                0 15px 45px rgba(0, 0, 0, 0.2);
+
+            animation: fadeUp 0.75s .1s ease both;
+        }
+
+        .input,
+        .select {
+            width: 100%;
+
+            padding: 13px 14px;
+
+            background:
+                rgba(7, 9, 15, 0.8);
+
+            color: #fff;
+
+            border:
+                1px solid rgba(255, 255, 255, 0.07);
+
+            border-radius: 10px;
+
+            outline: none;
+
+            font-size: 12px;
+
+            transition:
+                border-color .25s ease,
+                box-shadow .25s ease,
+                background .25s ease;
+
+            color-scheme: dark;
+        }
+
+        .input::placeholder {
+            color: #5e6574;
+        }
+
+        .input:hover,
+        .select:hover {
+            border-color:
+                rgba(255, 255, 255, 0.14);
+        }
+
+        .input:focus,
+        .select:focus {
+            border-color:
+                rgba(0, 229, 255, 0.42);
+
+            background:
+                rgba(9, 12, 19, 0.95);
+
+            box-shadow:
+                0 0 0 3px rgba(0, 229, 255, 0.055),
+                0 0 20px rgba(0, 229, 255, 0.06);
+        }
+
+        .select option {
+            background: #0b0e16;
+            color: #fff;
+        }
+
+        /* =========================================================
+           CHARTS
+        ========================================================= */
+
+        .charts {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
+
+            gap: 20px;
+
+            margin-bottom: 25px;
+        }
+
+        .chart-box {
+            position: relative;
+
+            min-height: 365px;
+
+            padding: 21px;
+
+            border-radius: var(--radius);
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(15, 18, 28, 0.94),
+                    rgba(8, 10, 16, 0.98)
+                );
+
+            border: 1px solid var(--border);
+
+            overflow: hidden;
+
+            box-shadow:
+                0 20px 55px rgba(0, 0, 0, 0.25);
+
+            transition:
+                border-color .3s ease,
+                transform .3s ease,
+                box-shadow .3s ease;
+
+            animation: fadeUp .8s .15s ease both;
+        }
+
+        .chart-box::before {
+            content: "";
+
+            position: absolute;
+
+            left: 0;
+            top: 0;
+
+            width: 45%;
+            height: 1px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    var(--cyan),
+                    transparent
+                );
+
+            box-shadow:
+                0 0 14px rgba(0, 229, 255, 0.5);
+        }
+
+        .chart-box:nth-child(2)::before {
+            background:
+                linear-gradient(
+                    90deg,
+                    var(--purple),
+                    transparent
+                );
+
+            box-shadow:
+                0 0 14px rgba(139, 92, 246, 0.5);
+        }
+
+        .chart-box:hover {
+            transform: translateY(-3px);
+
+            border-color:
+                rgba(0, 229, 255, 0.15);
+
+            box-shadow:
+                0 25px 65px rgba(0, 0, 0, 0.34),
+                0 0 30px rgba(0, 229, 255, 0.035);
+        }
+
+        .chart-title {
+            position: relative;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 9px;
+
+            margin-bottom: 20px;
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            color: #dce2ec;
+        }
+
+        .chart-title::before {
+            content: "";
+
+            width: 4px;
+            height: 17px;
+
+            border-radius: 5px;
+
+            background:
+                linear-gradient(
+                    180deg,
+                    var(--cyan),
+                    var(--blue)
+                );
+
+            box-shadow:
+                0 0 10px rgba(0, 229, 255, 0.35);
+        }
+
+        .chart-box:nth-child(2) .chart-title::before {
+            background:
+                linear-gradient(
+                    180deg,
+                    var(--purple),
+                    var(--pink)
+                );
+
+            box-shadow:
+                0 0 10px rgba(139, 92, 246, 0.35);
+        }
+
+        .chart-container {
+            position: relative;
+
+            height: 285px;
+        }
+
+        /* =========================================================
+           TABLE
+        ========================================================= */
+
+        .table-box {
+            position: relative;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(14, 17, 26, 0.95),
+                    rgba(7, 9, 15, 0.98)
+                );
+
+            border: 1px solid var(--border);
+
+            border-radius: var(--radius);
+
+            overflow: hidden;
+
+            box-shadow:
+                0 25px 70px rgba(0, 0, 0, 0.3);
+
+            animation: fadeUp .85s .2s ease both;
+        }
+
+        .table-box::before {
+            content: "";
+
+            position: absolute;
+
+            left: 0;
+            right: 0;
+            top: 0;
+
+            height: 1px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    var(--cyan),
+                    var(--purple),
+                    transparent
+                );
+
+            opacity: .65;
+
+            box-shadow:
+                0 0 16px rgba(0, 229, 255, 0.3);
+        }
+
+        .table-header {
+            display: flex;
+
+            justify-content: space-between;
+            align-items: center;
+
+            gap: 15px;
+
+            padding: 19px 21px;
+
+            border-bottom:
+                1px solid rgba(255, 255, 255, 0.055);
+
+            background:
+                rgba(255, 255, 255, 0.012);
+        }
+
+        .table-header h2 {
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            font-size: 14px;
+
+            font-weight: 700;
+        }
+
+        .table-header h2::before {
+            content: "◈";
+
+            color: var(--cyan);
+
+            font-size: 12px;
+
+            text-shadow:
+                0 0 10px var(--cyan);
+        }
+
+        .table-count {
+            color: var(--muted-2);
+
+            font-size: 11px;
+        }
+
+        .table-wrapper {
+            width: 100%;
+
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+
+            border-collapse: collapse;
+
+            min-width: 850px;
+        }
+
+        th {
+            text-align: left;
+
+            padding: 13px 18px;
+
+            color: #626a7a;
+
+            font-size: 9px;
+
+            font-weight: 700;
+
+            letter-spacing: 1px;
+
+            border-bottom:
+                1px solid rgba(255, 255, 255, 0.055);
+
+            background:
+                rgba(255, 255, 255, 0.012);
+        }
+
+        td {
+            padding: 15px 18px;
+
+            color: #cdd2dc;
+
+            font-size: 12px;
+
+            border-bottom:
+                1px solid rgba(255, 255, 255, 0.035);
+
+            transition:
+                background .2s ease,
+                color .2s ease;
+        }
+
+        tbody tr {
+            transition:
+                transform .2s ease,
+                background .2s ease;
+        }
+
+        tbody tr:hover td {
+            background:
+                rgba(0, 229, 255, 0.025);
+
+            color: #fff;
+        }
+
+        tbody tr:hover {
+            box-shadow:
+                inset 3px 0 0 rgba(0, 229, 255, 0.55);
+        }
+
+        .reel-link {
+            display: inline-flex;
+
+            align-items: center;
+
+            padding: 6px 9px;
+
+            color: #aab3c2;
+
+            text-decoration: none;
+
+            background:
+                rgba(255, 255, 255, 0.025);
+
+            border:
+                1px solid rgba(255, 255, 255, 0.06);
+
+            border-radius: 7px;
+
+            transition:
+                all .2s ease;
+        }
+
+        .reel-link:hover {
+            color: #fff;
+
+            border-color:
+                rgba(0, 229, 255, 0.3);
+
+            background:
+                rgba(0, 229, 255, 0.06);
+
+            box-shadow:
+                0 0 15px rgba(0, 229, 255, 0.08);
+        }
+
+        .account-badge {
+            display: inline-flex;
+
+            align-items: center;
+
+            padding: 5px 8px;
+
+            color: #aeb7c7;
+
+            font-size: 10px;
+
+            border-radius: 7px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(59, 130, 246, 0.08),
+                    rgba(139, 92, 246, 0.08)
+                );
+
+            border:
+                1px solid rgba(139, 92, 246, 0.16);
+
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.025);
+        }
+
+        /* =========================================================
+           PAGINATION
+        ========================================================= */
+
+        .pagination {
+            display: flex;
+
+            justify-content: center;
+            align-items: center;
+
+            gap: 12px;
+
+            padding: 21px;
+        }
+
+        .page-btn {
+            position: relative;
+
+            padding: 9px 14px;
+
+            color: #cbd1dc;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(25, 28, 39, 0.95),
+                    rgba(13, 15, 23, 0.95)
+                );
+
+            border:
+                1px solid rgba(255, 255, 255, 0.07);
+
+            border-radius: 9px;
+
+            cursor: pointer;
+
+            font-size: 11px;
+
+            font-weight: 600;
+
+            transition:
+                all .25s ease;
+        }
+
+        .page-btn:hover:not(:disabled) {
+            color: #fff;
+
+            border-color:
+                rgba(0, 229, 255, 0.3);
+
+            box-shadow:
+                0 0 18px rgba(0, 229, 255, 0.08);
+
+            transform: translateY(-2px);
+        }
+
+        .page-btn:disabled {
+            opacity: .25;
+
+            cursor: not-allowed;
+        }
+
+        .page-info {
+            min-width: 100px;
+
+            text-align: center;
+
+            color: #687082;
+
+            font-size: 11px;
+        }
+
+        /* =========================================================
+           STATUS
+        ========================================================= */
+
+        .status {
+            position: fixed;
+
+            right: 22px;
+            bottom: 22px;
+
+            display: none;
+
+            align-items: center;
+
+            gap: 9px;
+
+            min-width: 180px;
+
+            padding: 12px 15px;
+
+            color: #dce3ee;
+
+            background:
+                rgba(12, 15, 23, 0.94);
+
+            border:
+                1px solid rgba(0, 229, 255, 0.2);
+
+            border-radius: 11px;
+
+            font-size: 11px;
+
+            backdrop-filter: blur(18px);
+
+            box-shadow:
+                0 15px 45px rgba(0, 0, 0, 0.4),
+                0 0 25px rgba(0, 229, 255, 0.06);
+
+            z-index: 100;
+
+            animation: statusIn .35s ease;
+        }
+
+        .status::before {
+            content: "";
+
+            width: 7px;
+            height: 7px;
+
+            flex-shrink: 0;
+
+            border-radius: 50%;
+
+            background: var(--cyan);
+
+            box-shadow:
+                0 0 9px var(--cyan);
+
+            animation: pulse 1.5s infinite;
+        }
+
+        .status.show {
+            display: flex;
+        }
+
+        /* =========================================================
+           EMPTY
+        ========================================================= */
+
+        .empty {
+            padding: 65px 30px !important;
+
+            text-align: center;
+
+            color: #4d5565 !important;
+
+            font-size: 12px;
+        }
+
+        .empty::before {
+            content: "◌";
+
+            display: block;
+
+            margin-bottom: 10px;
+
+            color: #394150;
+
+            font-size: 30px;
+        }
+
+        /* =========================================================
+           ANIMATIONS
+        ========================================================= */
+
+        @keyframes fadeUp {
+
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes neonRotate {
+
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: .55;
+                transform: scale(.82);
+            }
+        }
+
+        @keyframes statusIn {
+
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* =========================================================
+           RESPONSIVO
+        ========================================================= */
+
+        @media (max-width: 1200px) {
+
+            .cards {
+                grid-template-columns:
+                    repeat(3, minmax(0, 1fr));
+            }
+
+            .filters {
+                grid-template-columns:
+                    1fr 1fr;
+            }
+        }
+
+        @media (max-width: 800px) {
+
+            .container {
+                width: 92%;
+                padding-top: 20px;
+            }
+
+            header {
+                padding: 22px;
+            }
+
+            .charts {
+                grid-template-columns: 1fr;
+            }
+
+            .cards {
+                grid-template-columns:
+                    repeat(2, minmax(0, 1fr));
+            }
+
+            .chart-box {
+                min-height: 340px;
+            }
+
+            .chart-container {
+                height: 260px;
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            .container {
+                width: 94%;
+                padding-bottom: 40px;
+            }
+
+            header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .perfil {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .cards {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+
+            .card {
+                padding: 17px;
+                min-height: 115px;
+            }
+
+            .card-value {
+                font-size: 21px;
+            }
+
+            .card-title {
+                font-size: 9px;
+            }
+
+            .filters {
+                grid-template-columns: 1fr;
+            }
+
+            .table-header {
+                padding: 17px;
+            }
+
+            .pagination {
+                gap: 8px;
+            }
+
+            .page-btn {
+                padding: 8px 10px;
+            }
+
+            .status {
+                right: 12px;
+                left: 12px;
+                bottom: 12px;
+            }
+        }
+
+        @media (max-width: 400px) {
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .logo-area h1 {
+                font-size: 23px;
+            }
+
+            .account-filter,
+            .filters {
+                padding: 14px;
+            }
+        }
+
+        /* =========================================================
+           REDUZIR ANIMAÇÕES
+        ========================================================= */
+
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+                animation-duration: .01ms !important;
+
+                animation-iteration-count: 1 !important;
+
+                scroll-behavior: auto !important;
+
+                transition-duration: .01ms !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- =========================================================
+         HEADER
+    ========================================================== -->
+
+    <header>
+
+        <div class="logo-area">
+
+            <h1>
+                Instagram Analytics
+            </h1>
+
+            <p>
+                Monitoramento inteligente de Reels
+            </p>
+
+        </div>
+
+        <div class="perfil">
+
+            Perfil:
+
+            <strong id="perfil">
+                @carregando...
+            </strong>
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================================================
+         FILTRO DE CONTAS
+    ========================================================== -->
+
+    <div class="account-filter neon-panel">
+
+        <div class="account-filter-top">
+
+            <div class="account-title">
+                CONTA ANALISADA
+            </div>
+
+            <div
+                class="account-count"
+                id="accountCount"
+            >
+                0 contas encontradas
+            </div>
+
+        </div>
+
+        <select
+            id="accountSelect"
+            class="account-select"
+        >
+
+            <option value="__all__">
+                Todas as contas
+            </option>
+
+        </select>
+
+    </div>
+
+
+    <!-- =========================================================
+         CARDS
+    ========================================================== -->
+
+    <div class="cards">
+
+        <div class="card">
+
+            <div class="card-title">
+                Reels coletados
+            </div>
+
+            <div
+                class="card-value"
+                id="totalReels"
+            >
+                0
+            </div>
+
+            <div class="card-sub">
+                Reels disponíveis
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-title">
+                Visualizações totais
+            </div>
+
+            <div
+                class="card-value"
+                id="totalViews"
+            >
+                0
+            </div>
+
+            <div class="card-sub">
+                Views identificadas
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-title">
+                Idade da conta
+            </div>
+
+            <div
+                class="card-value"
+                id="idadeConta"
+            >
+                —
+            </div>
+
+            <div class="card-sub">
+                Baseado no Reel mais antigo
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-title">
+                Média de curtidas
+            </div>
+
+            <div
+                class="card-value"
+                id="mediaCurtidas"
+            >
+                —
+            </div>
+
+            <div class="card-sub">
+                Por Reel
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-title">
+                Média de comentários
+            </div>
+
+            <div
+                class="card-value"
+                id="mediaComentarios"
+            >
+                —
+            </div>
+
+            <div class="card-sub">
+                Por Reel
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================================
+         MELHOR HORÁRIO
+    ========================================================== -->
+
+    <div class="card best-time">
+
+        <div class="card-title">
+            Melhor horário
+        </div>
+
+        <div
+            class="card-value"
+            id="melhorHorario"
+        >
+            —
+        </div>
+
+        <div class="card-sub">
+            Horário com maior média de visualizações
+        </div>
+
+    </div>
+
+
+    <!-- =========================================================
+         FILTROS
+    ========================================================== -->
+
+    <div class="filters">
+
+        <input
+            id="search"
+            class="input"
+            type="text"
+            placeholder="Pesquisar Reel..."
+        >
+
+        <input
+            id="dateFilter"
+            class="input"
+            type="text"
+            placeholder="Data: DD/MM/AAAA"
+        >
+
+        <select
+            id="hourFilter"
+            class="select"
+        >
+
+            <option value="">
+                Todas as horas
+            </option>
+
+        </select>
+
+        <select
+            id="sortFilter"
+            class="select"
+        >
+
+            <option value="recent">
+                Mais recentes
+            </option>
+
+            <option value="oldest">
+                Mais antigos
+            </option>
+
+            <option value="likes">
+                Mais curtidas
+            </option>
+
+            <option value="comments">
+                Mais comentários
+            </option>
+
+            <option value="views">
+                Mais visualizações
+            </option>
+
+        </select>
+
+    </div>
+
+
+    <!-- =========================================================
+         GRÁFICOS
+    ========================================================== -->
+
+    <div class="charts">
+
+        <div class="chart-box">
+
+            <div class="chart-title">
+                Visualizações por horário
+            </div>
+
+            <div class="chart-container">
+
+                <canvas id="viewsChart"></canvas>
+
+            </div>
+
+        </div>
+
+
+        <div class="chart-box">
+
+            <div class="chart-title">
+                Publicações por dia da semana
+            </div>
+
+            <div class="chart-container">
+
+                <canvas id="daysChart"></canvas>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================================
+         TABELA
+    ========================================================== -->
+
+    <div class="table-box">
+
+        <div class="table-header">
+
+            <h2>
+                Reels
+            </h2>
+
+            <div
+                class="table-count"
+                id="tableCount"
+            >
+                0 registros
+            </div>
+
+        </div>
+
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            CONTA
+                        </th>
+
+                        <th>
+                            DATA
+                        </th>
+
+                        <th>
+                            HORA
+                        </th>
+
+                        <th>
+                            DIA
+                        </th>
+
+                        <th>
+                            VIEWS
+                        </th>
+
+                        <th>
+                            CURTIDAS
+                        </th>
+
+                        <th>
+                            COMENTÁRIOS
+                        </th>
+
+                        <th>
+                            REEL
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="tableBody"></tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- PAGINAÇÃO -->
+
+        <div class="pagination">
+
+            <button
+                class="page-btn"
+                id="prevPage"
+                onclick="paginaAnterior()"
+            >
+                ← Anterior
+            </button>
+
+            <span
+                class="page-info"
+                id="pageInfo"
+            >
+                Página 1
+            </span>
+
+            <button
+                class="page-btn"
+                id="nextPage"
+                onclick="proximaPagina()"
+            >
+                Próxima →
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     STATUS
+========================================================== -->
+
+<div
+    id="status"
+    class="status"
+></div>
+
+
+<script>
+
+    /* =====================================================
+       CONFIGURAÇÕES
+    ===================================================== */
+
+    let reels = [];
+
+    let reelsFiltrados = [];
+
+    let config = {};
+
+    let contasConfiguradas = [];
+
+    let paginaAtual = 1;
+
+    const POR_PAGINA = 25;
+
+    let viewsChart = null;
+
+    let daysChart = null;
+
+
+    /* =====================================================
+       MEMÓRIA DA CONTA SELECIONADA
+    ===================================================== */
+
+    const STORAGE_KEY_CONTA =
+        "instagramAnalyticsContaSelecionada";
+
+
+    /* =====================================================
+       ELEMENTOS
+    ===================================================== */
+
+    const accountSelect =
+        document.getElementById(
+            "accountSelect"
+        );
+
+    const search =
+        document.getElementById(
+            "search"
+        );
+
+    const dateFilter =
+        document.getElementById(
+            "dateFilter"
+        );
+
+    const hourFilter =
+        document.getElementById(
+            "hourFilter"
+        );
+
+    const sortFilter =
+        document.getElementById(
+            "sortFilter"
+        );
+
+
+    /* =====================================================
+       STATUS
+    ===================================================== */
+
+    function mostrarStatus(texto) {
+
+        const status =
+            document.getElementById(
+                "status"
+            );
+
+        status.textContent =
+            texto;
+
+        status.classList.add(
+            "show"
+        );
+
+        setTimeout(() => {
+
+            status.classList.remove(
+                "show"
+            );
+
+        }, 3000);
+    }
+
+
+    /* =====================================================
+       CONVERTER NÚMERO
+    ===================================================== */
+
+    function numero(valor) {
+
+        if (
+            valor === null ||
+            valor === undefined ||
+            valor === ""
+        ) {
+
+            return 0;
+        }
+
+
+        if (
+            typeof valor === "number"
+        ) {
+
+            return valor;
+        }
+
+
+        let texto =
+            String(valor)
+                .trim()
+                .toLowerCase();
+
+
+        texto =
+            texto.replace(
+                /\s/g,
+                ""
+            );
+
+
+        /* milhões */
+
+        if (
+            texto.includes("mi") ||
+            texto.includes("milhão") ||
+            texto.includes("milhões")
+        ) {
+
+            texto =
+                texto
+                    .replace(
+                        "milhões",
+                        ""
+                    )
+                    .replace(
+                        "milhão",
+                        ""
+                    )
+                    .replace(
+                        "mi",
+                        ""
+                    )
+                    .replace(
+                        ",",
+                        "."
+                    );
+
+
+            const n =
+                parseFloat(texto);
+
+
+            return isNaN(n)
+                ? 0
+                : Math.round(
+                    n * 1000000
+                );
+        }
+
+
+        /* mil */
+
+        if (
+            texto.includes("mil")
+        ) {
+
+            texto =
+                texto
+                    .replace(
+                        "mil",
+                        ""
+                    )
+                    .replace(
+                        ",",
+                        "."
+                    );
+
+
+            const n =
+                parseFloat(texto);
+
+
+            return isNaN(n)
+                ? 0
+                : Math.round(
+                    n * 1000
+                );
+        }
+
+
+        /* números brasileiros */
+
+        texto =
+            texto
+                .replace(
+                    /\./g,
+                    ""
+                )
+                .replace(
+                    ",",
+                    "."
+                );
+
+
+        const n =
+            parseFloat(texto);
+
+
+        return isNaN(n)
+            ? 0
+            : Math.round(n);
+    }
+
+
+    /* =====================================================
+       FORMATAR NÚMERO
+    ===================================================== */
+
+    function formatarNumero(valor) {
+
+        return Number(
+            valor || 0
+        ).toLocaleString(
+            "pt-BR"
+        );
+    }
+
+
+    /* =====================================================
+       DESCOBRIR USUÁRIO
+    ===================================================== */
+
+    function obterUsuario(reel) {
+
+        const campos = [
+
+            "usuario",
+            "user",
+            "username",
+            "perfil",
+            "conta",
+            "account"
+
+        ];
+
+
+        for (
+            const campo of campos
+        ) {
+
+            if (
+                reel[campo] !== undefined &&
+                reel[campo] !== null &&
+                String(
+                    reel[campo]
+                ).trim() !== ""
+            ) {
+
+                return String(
+                    reel[campo]
+                )
+                    .replace(
+                        "@",
+                        ""
+                    )
+                    .trim();
+            }
+        }
+
+
+        if (reel.url) {
+
+            try {
+
+                const url =
+                    new URL(
+                        reel.url
+                    );
+
+
+                const partes =
+                    url.pathname
+                        .split("/")
+                        .filter(Boolean);
+
+
+                if (
+                    partes.length >= 1
+                ) {
+
+                    return partes[0]
+                        .replace(
+                            "@",
+                            ""
+                        );
+                }
+
+            }
+
+            catch (e) {
+
+                // ignora
+
+            }
+        }
+
+
+        return "desconhecido";
+    }
+
+
+    /* =====================================================
+       ADICIONAR USUÁRIO NORMALIZADO
+    ===================================================== */
+
+    function prepararReels() {
+
+        reels =
+            reels.map(
+                (
+                    reel,
+                    index
+                ) => {
+
+                    const novo = {
+                        ...reel
+                    };
+
+
+                    novo.__usuario =
+                        obterUsuario(
+                            novo
+                        );
+
+
+                    novo.__ordem =
+                        Number(
+                            novo.ordem ||
+                            index + 1
+                        );
+
+
+                    return novo;
+
+                }
+            );
+    }
+
+
+    /* =====================================================
+       ENCONTRAR TODAS AS CONTAS
+    ===================================================== */
+
+    function atualizarContas() {
+
+        const contasDosReels =
+            [
+                ...new Set(
+
+                    reels
+                        .map(
+                            r =>
+                                r.__usuario
+                        )
+                        .filter(Boolean)
+                        .filter(
+                            u =>
+                                u !==
+                                "desconhecido"
+                        )
+
+                )
+            ];
+
+
+        const contasDoConfig =
+            contasConfiguradas
+                .map(
+                    conta =>
+                        String(
+                            conta.perfil ||
+                            ""
+                        )
+                            .replace(
+                                "@",
+                                ""
+                            )
+                            .trim()
+                )
+                .filter(Boolean);
+
+
+        const contas =
+            [
+                ...new Set([
+                    ...contasDoConfig,
+                    ...contasDosReels
+                ])
+            ]
+            .sort(
+                (
+                    a,
+                    b
+                ) =>
+                    a.localeCompare(
+                        b,
+                        "pt-BR"
+                    )
+            );
+
+
+        /* =================================================
+           RECRIAR SELECT
+        ================================================= */
+
+        accountSelect.innerHTML =
+            "";
+
+
+        const todas =
+            document.createElement(
+                "option"
+            );
+
+
+        todas.value =
+            "__all__";
+
+
+        todas.textContent =
+            `Todas as contas (${reels.length})`;
+
+
+        accountSelect.appendChild(
+            todas
+        );
+
+
+        contas.forEach(
+            conta => {
+
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+
+                option.value =
+                    conta;
+
+
+                option.textContent =
+                    `@${conta}`;
+
+
+                accountSelect.appendChild(
+                    option
+                );
+
+            }
+        );
+
+
+        /* =================================================
+           CONTADOR
+        ================================================= */
+
+        const accountCount =
+            document.getElementById(
+                "accountCount"
+            );
+
+
+        accountCount.textContent =
+            `${contas.length} ${
+                contas.length === 1
+                    ? "conta encontrada"
+                    : "contas encontradas"
+            }`;
+
+
+        /* =================================================
+           RECUPERAR ÚLTIMA CONTA
+        ================================================= */
+
+        let contaSalva = null;
+
+
+        try {
+
+            contaSalva =
+                localStorage.getItem(
+                    STORAGE_KEY_CONTA
+                );
+
+        }
+
+        catch (erro) {
+
+            console.warn(
+                "Não foi possível acessar localStorage:",
+                erro
+            );
+        }
+
+
+        const contaExiste =
+            contaSalva === "__all__" ||
+            contas.includes(
+                contaSalva
+            );
+
+
+        if (contaExiste) {
+
+            accountSelect.value =
+                contaSalva;
+
+        }
+
+        else if (
+            contas.length === 1
+        ) {
+
+            /*
+             * Se existir somente uma conta,
+             * seleciona ela automaticamente.
+             */
+
+            accountSelect.value =
+                contas[0];
+
+
+            try {
+
+                localStorage.setItem(
+                    STORAGE_KEY_CONTA,
+                    contas[0]
+                );
+
+            }
+
+            catch (erro) {
+
+                console.warn(
+                    "Não foi possível salvar a conta:",
+                    erro
+                );
+            }
+
+        }
+
+        else {
+
+            accountSelect.value =
+                "__all__";
+
+        }
+
+    }
+
+
+    /* =====================================================
+       PERFIL
+    ===================================================== */
+
+    function atualizarPerfil() {
+
+        const selecionada =
+            accountSelect.value;
+
+
+        let perfil;
+
+
+        if (
+            selecionada &&
+            selecionada !== "__all__"
+        ) {
+
+            perfil =
+                selecionada;
+
+        }
+
+        else {
+
+            if (
+                contasConfiguradas.length >
+                1
+            ) {
+
+                perfil =
+                    "Todas as contas";
+
+            }
+
+            else {
+
+                perfil =
+                    config.perfil ||
+                    config.usuario ||
+                    (
+                        reels.length
+                            ? reels[0]
+                                .__usuario
+                            : "desconhecido"
+                    );
+            }
+        }
+
+
+        document.getElementById(
+            "perfil"
+        ).textContent =
+
+            perfil ===
+            "Todas as contas"
+
+                ? perfil
+
+                : "@" + perfil;
+
+    }
+
+
+    /* =====================================================
+       DATA
+    ===================================================== */
+
+    function obterData(reel) {
+
+        return reel.data || "";
+    }
+
+
+    /* =====================================================
+       HORA
+    ===================================================== */
+
+    function obterHora(reel) {
+
+        return reel.hora || "";
+    }
+
+
+    /* =====================================================
+       DIA
+    ===================================================== */
+
+    function obterDia(reel) {
+
+        if (reel.dia) {
+
+            return String(
+                reel.dia
+            )
+                .toLowerCase()
+                .trim();
+        }
+
+
+        const data =
+            obterData(
+                reel
+            );
+
+
+        if (!data) {
+            return "";
+        }
+
+
+        const partes =
+            data.split(
+                "/"
+            );
+
+
+        if (
+            partes.length !== 3
+        ) {
+
+            return "";
+        }
+
+
+        const dia =
+            parseInt(
+                partes[0]
+            );
+
+
+        const mes =
+            parseInt(
+                partes[1]
+            ) - 1;
+
+
+        const ano =
+            parseInt(
+                partes[2]
+            );
+
+
+        const d =
+            new Date(
+                ano,
+                mes,
+                dia
+            );
+
+
+        const nomes = [
+
+            "domingo",
+            "segunda-feira",
+            "terça-feira",
+            "quarta-feira",
+            "quinta-feira",
+            "sexta-feira",
+            "sábado"
+
+        ];
+
+
+        return nomes[
+            d.getDay()
+        ];
+    }
+
+
+    /* =====================================================
+       DATA PARA TIMESTAMP
+    ===================================================== */
+
+    function timestampData(
+        data
+    ) {
+
+        if (!data) {
+            return 0;
+        }
+
+
+        const partes =
+            data.split(
+                "/"
+            );
+
+
+        if (
+            partes.length !== 3
+        ) {
+
+            return 0;
+        }
+
+
+        const dia =
+            parseInt(
+                partes[0]
+            );
+
+
+        const mes =
+            parseInt(
+                partes[1]
+            ) - 1;
+
+
+        const ano =
+            parseInt(
+                partes[2]
+            );
+
+
+        return new Date(
+            ano,
+            mes,
+            dia
+        ).getTime();
+    }
+
+
+    /* =====================================================
+       FILTRAR
+    ===================================================== */
+
+    function aplicarFiltros() {
+
+        const busca =
+            search.value
+                .toLowerCase()
+                .trim();
+
+
+        const data =
+            dateFilter.value
+                .trim();
+
+
+        const hora =
+            hourFilter.value;
+
+
+        const conta =
+            accountSelect.value;
+
+
+        reelsFiltrados =
+            reels.filter(
+                reel => {
+
+                    /* conta */
+
+                    if (
+                        conta !== "__all__" &&
+                        reel.__usuario !==
+                        conta
+                    ) {
+
+                        return false;
+                    }
+
+
+                    /* pesquisa */
+
+                    if (busca) {
+
+                        const texto =
+                            (
+                                reel.url ||
+                                ""
+                            ).toLowerCase();
+
+
+                        if (
+                            !texto.includes(
+                                busca
+                            )
+                        ) {
+
+                            return false;
+                        }
+                    }
+
+
+                    /* data */
+
+                    if (data) {
+
+                        const regex =
+                            /^\d{2}\/\d{2}\/\d{4}$/;
+
+
+                        if (
+                            regex.test(
+                                data
+                            ) &&
+                            obterData(
+                                reel
+                            ) !== data
+                        ) {
+
+                            return false;
+                        }
+                    }
+
+
+                    /* hora */
+
+                    if (hora) {
+
+                        const h =
+                            obterHora(
+                                reel
+                            ).substring(
+                                0,
+                                2
+                            );
+
+
+                        if (
+                            h !== hora
+                        ) {
+
+                            return false;
+                        }
+                    }
+
+
+                    return true;
+
+                }
+            );
+
+
+        /* =================================================
+           ORDENAÇÃO
+        ================================================= */
+
+        const ordem =
+            sortFilter.value;
+
+
+        if (
+            ordem === "recent"
+        ) {
+
+            reelsFiltrados.sort(
+                (
+                    a,
+                    b
+                ) =>
+                    timestampData(
+                        obterData(b)
+                    ) -
+                    timestampData(
+                        obterData(a)
+                    )
+            );
+
+        }
+
+        else if (
+            ordem === "oldest"
+        ) {
+
+            reelsFiltrados.sort(
+                (
+                    a,
+                    b
+                ) =>
+                    timestampData(
+                        obterData(a)
+                    ) -
+                    timestampData(
+                        obterData(b)
+                    )
+            );
+
+        }
+
+        else if (
+            ordem === "likes"
+        ) {
+
+            reelsFiltrados.sort(
+                (
+                    a,
+                    b
+                ) =>
+                    numero(
+                        b.curtidas
+                    ) -
+                    numero(
+                        a.curtidas
+                    )
+            );
+
+        }
+
+        else if (
+            ordem === "comments"
+        ) {
+
+            reelsFiltrados.sort(
+                (
+                    a,
+                    b
+                ) =>
+                    numero(
+                        b.comentarios
+                    ) -
+                    numero(
+                        a.comentarios
+                    )
+            );
+
+        }
+
+        else if (
+            ordem === "views"
+        ) {
+
+            reelsFiltrados.sort(
+                (
+                    a,
+                    b
+                ) =>
+                    numero(
+                        b.views
+                    ) -
+                    numero(
+                        a.views
+                    )
+            );
+
+        }
+
+
+        paginaAtual = 1;
+
+
+        atualizarTudo();
+    }
+
+
+    /* =====================================================
+       CARDS
+    ===================================================== */
+
+    function atualizarCards() {
+
+        const total =
+            reelsFiltrados.length;
+
+
+        const totalViews =
+            reelsFiltrados.reduce(
+                (
+                    soma,
+                    reel
+                ) =>
+                    soma +
+                    numero(
+                        reel.views
+                    ),
+                0
+            );
+
+
+        const curtidasValidas =
+            reelsFiltrados.filter(
+                r =>
+                    numero(
+                        r.curtidas
+                    ) > 0
+            );
+
+
+        const comentariosValidos =
+            reelsFiltrados.filter(
+                r =>
+                    numero(
+                        r.comentarios
+                    ) > 0
+            );
+
+
+        const mediaCurtidas =
+            curtidasValidas.length
+
+                ? curtidasValidas.reduce(
+                    (
+                        soma,
+                        reel
+                    ) =>
+                        soma +
+                        numero(
+                            reel.curtidas
+                        ),
+                    0
+                ) /
+                curtidasValidas.length
+
+                : 0;
+
+
+        const mediaComentarios =
+            comentariosValidos.length
+
+                ? comentariosValidos.reduce(
+                    (
+                        soma,
+                        reel
+                    ) =>
+                        soma +
+                        numero(
+                            reel.comentarios
+                        ),
+                    0
+                ) /
+                comentariosValidos.length
+
+                : 0;
+
+
+        document.getElementById(
+            "totalReels"
+        ).textContent =
+            formatarNumero(
+                total
+            );
+
+
+        document.getElementById(
+            "totalViews"
+        ).textContent =
+            formatarNumero(
+                totalViews
+            );
+
+
+        document.getElementById(
+            "mediaCurtidas"
+        ).textContent =
+
+            curtidasValidas.length
+
+                ? formatarNumero(
+                    Math.round(
+                        mediaCurtidas
+                    )
+                )
+
+                : "—";
+
+
+        document.getElementById(
+            "mediaComentarios"
+        ).textContent =
+
+            comentariosValidos.length
+
+                ? formatarNumero(
+                    Math.round(
+                        mediaComentarios
+                    )
+                )
+
+                : "—";
+
+
+        calcularIdadeConta();
+
+        calcularMelhorHorario();
+    }
+
+
+    /* =====================================================
+       IDADE DA CONTA
+    ===================================================== */
+
+    function calcularIdadeConta() {
+
+        if (
+            !reelsFiltrados.length
+        ) {
+
+            document.getElementById(
+                "idadeConta"
+            ).textContent =
+                "—";
+
+            return;
+        }
+
+
+        const datas =
+            reelsFiltrados
+                .map(
+                    r =>
+                        timestampData(
+                            obterData(r)
+                        )
+                )
+                .filter(Boolean);
+
+
+        if (!datas.length) {
+
+            document.getElementById(
+                "idadeConta"
+            ).textContent =
+                "—";
+
+            return;
+        }
+
+
+        const menor =
+            Math.min(
+                ...datas
+            );
+
+
+        const agora =
+            Date.now();
+
+
+        const dias =
+            Math.floor(
+                (
+                    agora -
+                    menor
+                ) /
+                (
+                    1000 *
+                    60 *
+                    60 *
+                    24
+                )
+            );
+
+
+        if (dias < 1) {
+
+            document.getElementById(
+                "idadeConta"
+            ).textContent =
+                "Hoje";
+
+        }
+
+        else if (
+            dias < 30
+        ) {
+
+            document.getElementById(
+                "idadeConta"
+            ).textContent =
+                `${dias} dias`;
+
+        }
+
+        else {
+
+            const meses =
+                Math.floor(
+                    dias / 30
+                );
+
+
+            document.getElementById(
+                "idadeConta"
+            ).textContent =
+                `${meses} ${
+                    meses === 1
+                        ? "mês"
+                        : "meses"
+                }`;
+        }
+    }
+
+
+    /* =====================================================
+       MELHOR HORÁRIO
+    ===================================================== */
+
+    function calcularMelhorHorario() {
+
+        const dados = {};
+
+
+        reelsFiltrados.forEach(
+            reel => {
+
+                const hora =
+                    obterHora(
+                        reel
+                    )
+                        .substring(
+                            0,
+                            2
+                        );
+
+
+                if (!hora) {
+                    return;
+                }
+
+
+                if (
+                    !dados[hora]
+                ) {
+
+                    dados[hora] = {
+
+                        total: 0,
+
+                        quantidade: 0
+
+                    };
+                }
+
+
+                dados[hora].total +=
+                    numero(
+                        reel.views
+                    );
+
+
+                dados[hora].quantidade++;
+
+            }
+        );
+
+
+        let melhor = null;
+
+        let melhorMedia = 0;
+
+
+        Object.keys(
+            dados
+        ).forEach(
+            hora => {
+
+                const media =
+                    dados[hora].total /
+                    dados[hora].quantidade;
+
+
+                if (
+                    media >
+                    melhorMedia
+                ) {
+
+                    melhorMedia =
+                        media;
+
+                    melhor =
+                        hora;
+                }
+
+            }
+        );
+
+
+        document.getElementById(
+            "melhorHorario"
+        ).textContent =
+
+            melhor
+
+                ? `${melhor}:00`
+
+                : "—";
+    }
+
+
+    /* =====================================================
+       HORÁRIOS DO FILTRO
+    ===================================================== */
+
+    function carregarHoras() {
+
+        const horas =
+            new Set();
+
+
+        reels.forEach(
+            reel => {
+
+                const hora =
+                    obterHora(
+                        reel
+                    )
+                        .substring(
+                            0,
+                            2
+                        );
+
+
+                if (
+                    hora &&
+                    /^\d{2}$/.test(
+                        hora
+                    )
+                ) {
+
+                    horas.add(
+                        hora
+                    );
+                }
+
+            }
+        );
+
+
+        const atual =
+            hourFilter.value;
+
+
+        hourFilter.innerHTML = `
+            <option value="">
+                Todas as horas
+            </option>
+        `;
+
+
+        [
+            ...horas
+        ]
+            .sort()
+            .forEach(
+                hora => {
+
+                    const option =
+                        document.createElement(
+                            "option"
+                        );
+
+
+                    option.value =
+                        hora;
+
+
+                    option.textContent =
+                        `${hora}:00`;
+
+
+                    hourFilter.appendChild(
+                        option
+                    );
+
+                }
+            );
+
+
+        hourFilter.value =
+            atual;
+    }
+
+
+    /* =====================================================
+       TABELA
+    ===================================================== */
+
+    function atualizarTabela() {
+
+        const tbody =
+            document.getElementById(
+                "tableBody"
+            );
+
+
+        tbody.innerHTML = "";
+
+
+        const inicio =
+            (
+                paginaAtual - 1
+            ) *
+            POR_PAGINA;
+
+
+        const fim =
+            inicio +
+            POR_PAGINA;
+
+
+        const pagina =
+            reelsFiltrados.slice(
+                inicio,
+                fim
+            );
+
+
+        if (
+            !pagina.length
+        ) {
+
+            tbody.innerHTML = `
+                <tr>
+
+                    <td
+                        colspan="8"
+                        class="empty"
+                    >
+                        Nenhum Reel encontrado.
+                    </td>
+
+                </tr>
+            `;
+        }
+
+
+        pagina.forEach(
+            reel => {
+
+                const tr =
+                    document.createElement(
+                        "tr"
+                    );
+
+
+                const conta =
+                    reel.__usuario &&
+                    reel.__usuario !==
+                        "desconhecido"
+
+                        ? `@${reel.__usuario}`
+
+                        : "—";
+
+
+                tr.innerHTML = `
+
+                    <td>
+
+                        <span class="account-badge">
+
+                            ${conta}
+
+                        </span>
+
+                    </td>
+
+
+                    <td>
+                        ${obterData(reel) || "—"}
+                    </td>
+
+
+                    <td>
+                        ${obterHora(reel) || "—"}
+                    </td>
+
+
+                    <td>
+                        ${obterDia(reel) || "—"}
+                    </td>
+
+
+                    <td>
+                        ${formatarNumero(
+                            numero(
+                                reel.views
+                            )
+                        )}
+                    </td>
+
+
+                    <td>
+
+                        ${
+                            numero(
+                                reel.curtidas
+                            )
+
+                                ? formatarNumero(
+                                    numero(
+                                        reel.curtidas
+                                    )
+                                )
+
+                                : "—"
+                        }
+
+                    </td>
+
+
+                    <td>
+
+                        ${
+                            numero(
+                                reel.comentarios
+                            )
+
+                                ? formatarNumero(
+                                    numero(
+                                        reel.comentarios
+                                    )
+                                )
+
+                                : "—"
+                        }
+
+                    </td>
+
+
+                    <td>
+
+                        ${
+                            reel.url
+
+                                ? `
+
+                                    <a
+                                        class="reel-link"
+                                        href="${reel.url}"
+                                        target="_blank"
+                                        rel="noopener"
+                                    >
+                                        Abrir ↗
+                                    </a>
+
+                                `
+
+                                : "—"
+                        }
+
+                    </td>
+
+                `;
+
+
+                tbody.appendChild(
+                    tr
+                );
+
+            }
+        );
+
+
+        atualizarPaginacao();
+    }
+
+
+    /* =====================================================
+       PAGINAÇÃO
+    ===================================================== */
+
+    function atualizarPaginacao() {
+
+        const totalPaginas =
+            Math.max(
+                1,
+                Math.ceil(
+                    reelsFiltrados.length /
+                    POR_PAGINA
+                )
+            );
+
+
+        document.getElementById(
+            "pageInfo"
+        ).textContent =
+            `Página ${paginaAtual} de ${totalPaginas}`;
+
+
+        document.getElementById(
+            "prevPage"
+        ).disabled =
+            paginaAtual <= 1;
+
+
+        document.getElementById(
+            "nextPage"
+        ).disabled =
+            paginaAtual >=
+            totalPaginas;
+
+
+        document.getElementById(
+            "tableCount"
+        ).textContent =
+            `${reelsFiltrados.length} ${
+                reelsFiltrados.length === 1
+                    ? "registro"
+                    : "registros"
+            }`;
+    }
+
+
+    function paginaAnterior() {
+
+        if (
+            paginaAtual > 1
+        ) {
+
+            paginaAtual--;
+
+            atualizarTabela();
+        }
+    }
+
+
+    function proximaPagina() {
+
+        const totalPaginas =
+            Math.ceil(
+                reelsFiltrados.length /
+                POR_PAGINA
+            );
+
+
+        if (
+            paginaAtual <
+            totalPaginas
+        ) {
+
+            paginaAtual++;
+
+            atualizarTabela();
+        }
+    }
+
+
+    /* =====================================================
+       GRÁFICO DE VIEWS POR HORÁRIO
+    ===================================================== */
+
+    function atualizarViewsChart() {
+
+        const dados = {};
+
+
+        for (
+            let i = 0;
+            i < 24;
+            i++
+        ) {
+
+            const hora =
+                String(i)
+                    .padStart(
+                        2,
+                        "0"
+                    );
+
+
+            dados[hora] =
+                0;
+        }
+
+
+        reelsFiltrados.forEach(
+            reel => {
+
+                const hora =
+                    obterHora(
+                        reel
+                    )
+                        .substring(
+                            0,
+                            2
+                        );
+
+
+                if (
+                    dados[hora] !==
+                    undefined
+                ) {
+
+                    dados[hora] +=
+                        numero(
+                            reel.views
+                        );
+                }
+
+            }
+        );
+
+
+        const labels =
+            Object.keys(
+                dados
+            ).map(
+                hora =>
+                    `${hora}:00`
+            );
+
+
+        const valores =
+            Object.values(
+                dados
+            );
+
+
+        const ctx =
+            document.getElementById(
+                "viewsChart"
+            );
+
+
+        if (viewsChart) {
+
+            viewsChart.destroy();
+        }
+
+
+        viewsChart =
+            new Chart(
+                ctx,
+                {
+
+                    type: "bar",
+
+                    data: {
+
+                        labels: labels,
+
+                        datasets: [
+
+                            {
+
+                                label:
+                                    "Visualizações",
+
+                                data:
+                                    valores,
+
+                                borderWidth: 0,
+
+                                borderRadius: 5,
+
+                                backgroundColor:
+                                    "rgba(0, 229, 255, 0.35)",
+
+                                hoverBackgroundColor:
+                                    "rgba(0, 229, 255, 0.8)",
+
+                                borderSkipped:
+                                    false
+
+                            }
+
+                        ]
+                    },
+
+                    options: {
+
+                        responsive: true,
+
+                        maintainAspectRatio:
+                            false,
+
+                        animation: {
+
+                            duration: 700,
+
+                            easing:
+                                "easeOutQuart"
+
+                        },
+
+                        plugins: {
+
+                            legend: {
+
+                                display:
+                                    false
+                            },
+
+                            tooltip: {
+
+                                backgroundColor:
+                                    "rgba(8, 11, 18, 0.96)",
+
+                                borderColor:
+                                    "rgba(0, 229, 255, 0.25)",
+
+                                borderWidth: 1,
+
+                                titleColor:
+                                    "#ffffff",
+
+                                bodyColor:
+                                    "#aeb7c7",
+
+                                padding: 12,
+
+                                displayColors:
+                                    false,
+
+                                callbacks: {
+
+                                    label:
+                                        function(
+                                            context
+                                        ) {
+
+                                            return (
+                                                " " +
+                                                formatarNumero(
+                                                    context.raw
+                                                ) +
+                                                " visualizações"
+                                            );
+                                        }
+
+                                }
+                            }
+                        },
+
+                        scales: {
+
+                            x: {
+
+                                ticks: {
+
+                                    color:
+                                        "#646c7c",
+
+                                    font: {
+                                        size: 9
+                                    },
+
+                                    maxRotation: 0
+                                },
+
+                                grid: {
+                                    display:
+                                        false
+                                },
+
+                                border: {
+                                    display:
+                                        false
+                                }
+                            },
+
+                            y: {
+
+                                beginAtZero:
+                                    true,
+
+                                ticks: {
+
+                                    color:
+                                        "#646c7c",
+
+                                    font: {
+                                        size: 9
+                                    },
+
+                                    callback:
+                                        function(
+                                            value
+                                        ) {
+
+                                            return formatarNumero(
+                                                value
+                                            );
+
+                                        }
+                                },
+
+                                grid: {
+
+                                    color:
+                                        "rgba(255,255,255,0.035)"
+                                },
+
+                                border: {
+                                    display:
+                                        false
+                                }
+                            }
+                        }
+                    }
+                }
+            );
+    }
+
+
+    /* =====================================================
+       GRÁFICO DIAS DA SEMANA
+    ===================================================== */
+
+    function atualizarDaysChart() {
+
+        const dias = [
+
+            "segunda-feira",
+            "terça-feira",
+            "quarta-feira",
+            "quinta-feira",
+            "sexta-feira",
+            "sábado",
+            "domingo"
+
+        ];
+
+
+        const nomesDias = [
+
+            "Segunda",
+            "Terça",
+            "Quarta",
+            "Quinta",
+            "Sexta",
+            "Sábado",
+            "Domingo"
+
+        ];
+
+
+        const quantidade =
+            dias.map(
+                dia =>
+                    reelsFiltrados.filter(
+                        reel =>
+                            obterDia(
+                                reel
+                            ) === dia
+                    ).length
+            );
+
+
+        const ctx =
+            document.getElementById(
+                "daysChart"
+            );
+
+
+        if (daysChart) {
+
+            daysChart.destroy();
+        }
+
+
+        daysChart =
+            new Chart(
+                ctx,
+                {
+
+                    type: "bar",
+
+                    data: {
+
+                        labels:
+                            nomesDias,
+
+                        datasets: [
+
+                            {
+
+                                label:
+                                    "Publicações",
+
+                                data:
+                                    quantidade,
+
+                                borderWidth: 0,
+
+                                borderRadius: 6,
+
+                                backgroundColor:
+                                    "rgba(139, 92, 246, 0.38)",
+
+                                hoverBackgroundColor:
+                                    "rgba(139, 92, 246, 0.82)",
+
+                                borderSkipped:
+                                    false
+
+                            }
+
+                        ]
+                    },
+
+                    options: {
+
+                        responsive: true,
+
+                        maintainAspectRatio:
+                            false,
+
+                        animation: {
+
+                            duration: 700,
+
+                            easing:
+                                "easeOutQuart"
+
+                        },
+
+                        plugins: {
+
+                            legend: {
+
+                                display:
+                                    false
+                            },
+
+                            tooltip: {
+
+                                backgroundColor:
+                                    "rgba(8, 11, 18, 0.96)",
+
+                                borderColor:
+                                    "rgba(139, 92, 246, 0.3)",
+
+                                borderWidth: 1,
+
+                                titleColor:
+                                    "#ffffff",
+
+                                bodyColor:
+                                    "#aeb7c7",
+
+                                padding: 12,
+
+                                displayColors:
+                                    false,
+
+                                callbacks: {
+
+                                    label:
+                                        function(
+                                            context
+                                        ) {
+
+                                            const valor =
+                                                context.raw;
+
+
+                                            return (
+                                                " " +
+                                                valor +
+                                                (
+                                                    valor === 1
+                                                        ? " publicação"
+                                                        : " publicações"
+                                                )
+                                            );
+
+                                        }
+
+                                }
+                            }
+                        },
+
+                        scales: {
+
+                            x: {
+
+                                ticks: {
+
+                                    color:
+                                        "#646c7c",
+
+                                    font: {
+                                        size: 9
+                                    },
+
+                                    maxRotation: 0
+                                },
+
+                                grid: {
+
+                                    display:
+                                        false
+                                },
+
+                                border: {
+
+                                    display:
+                                        false
+                                }
+                            },
+
+                            y: {
+
+                                beginAtZero:
+                                    true,
+
+                                ticks: {
+
+                                    color:
+                                        "#646c7c",
+
+                                    font: {
+                                        size: 9
+                                    },
+
+                                    precision: 0
+                                },
+
+                                grid: {
+
+                                    color:
+                                        "rgba(255,255,255,0.035)"
+                                },
+
+                                border: {
+
+                                    display:
+                                        false
+                                }
+                            }
+                        }
+                    }
+                }
+            );
+    }
+
+
+    /* =====================================================
+       ATUALIZAR TUDO
+    ===================================================== */
+
+    function atualizarTudo() {
+
+        atualizarPerfil();
+
+        atualizarCards();
+
+        atualizarTabela();
+
+        atualizarViewsChart();
+
+        atualizarDaysChart();
+
+    }
+
+
+    /* =====================================================
+       EVENTOS
+    ===================================================== */
+
+    accountSelect.addEventListener(
+        "change",
+        () => {
+
+            paginaAtual = 1;
+
+
+            /* =================================================
+               SALVAR ÚLTIMA CONTA SELECIONADA
+            ================================================= */
+
+            try {
+
+                localStorage.setItem(
+                    STORAGE_KEY_CONTA,
+                    accountSelect.value
+                );
+
+            }
+
+            catch (erro) {
+
+                console.warn(
+                    "Não foi possível salvar a conta:",
+                    erro
+                );
+            }
+
+
+            aplicarFiltros();
+
+        }
+    );
+
+
+    search.addEventListener(
+        "input",
+        aplicarFiltros
+    );
+
+
+    dateFilter.addEventListener(
+        "input",
+        aplicarFiltros
+    );
+
+
+    hourFilter.addEventListener(
+        "change",
+        aplicarFiltros
+    );
+
+
+    sortFilter.addEventListener(
+        "change",
+        aplicarFiltros
+    );
+
+
+    /* =====================================================
+       CARREGAR DADOS
+    ===================================================== */
+
+    async function carregar() {
+
+        try {
+
+            mostrarStatus(
+                "Carregando dados..."
+            );
+
+
+            /* =================================================
+               CONFIG.JSON
+            ================================================= */
+
+            const configResponse =
+                await fetch(
+                    "config.json?v=" +
+                    Date.now()
+                );
+
+
+            if (
+                !configResponse.ok
+            ) {
+
+                throw new Error(
+                    "Não foi possível carregar config.json"
+                );
+            }
+
+
+            config =
+                await configResponse.json();
+
+
+            /* =================================================
+               DESCOBRIR CONTAS
+            ================================================= */
+
+            if (
+                Array.isArray(
+                    config.contas
+                )
+            ) {
+
+                contasConfiguradas =
+                    config.contas;
+
+            }
+
+            else if (
+                config.arquivo_json
+            ) {
+
+                contasConfiguradas = [
+
+                    {
+
+                        perfil:
+                            config.perfil ||
+                            config.usuario ||
+                            "desconhecido",
+
+                        arquivo_json:
+                            config.arquivo_json,
+
+                        arquivo_csv:
+                            config.arquivo_csv ||
+                            ""
+
+                    }
+
+                ];
+
+            }
+
+            else {
+
+                contasConfiguradas =
+                    [];
+
+            }
+
+
+            if (
+                !contasConfiguradas.length
+            ) {
+
+                throw new Error(
+                    "Nenhuma conta configurada em config.json"
+                );
+            }
+
+
+            /* =================================================
+               CARREGAR TODOS OS JSONS
+            ================================================= */
+
+            const resultados =
+                await Promise.all(
+
+                    contasConfiguradas.map(
+
+                        async conta => {
+
+                            const arquivo =
+                                conta.arquivo_json;
+
+
+                            if (!arquivo) {
+
+                                return [];
+                            }
+
+
+                            try {
+
+                                const response =
+                                    await fetch(
+                                        arquivo +
+                                        "?v=" +
+                                        Date.now()
+                                    );
+
+
+                                if (
+                                    !response.ok
+                                ) {
+
+                                    console.warn(
+                                        `Não foi possível carregar ${arquivo}`
+                                    );
+
+                                    return [];
+                                }
+
+
+                                const dados =
+                                    await response.json();
+
+
+                                const lista =
+                                    Array.isArray(
+                                        dados
+                                    )
+
+                                        ? dados
+
+                                        : (
+                                            Array.isArray(
+                                                dados.reels
+                                            )
+
+                                                ? dados.reels
+
+                                                : []
+                                        );
+
+
+                                return lista.map(
+                                    reel => {
+
+                                        const copia = {
+                                            ...reel
+                                        };
+
+
+                                        /* =================================================
+                                           SE O JSON NÃO TIVER USUÁRIO,
+                                           USA O PERFIL DO CONFIG.JSON
+                                        ================================================= */
+
+                                        if (
+                                            !copia.usuario &&
+                                            !copia.user &&
+                                            !copia.username &&
+                                            !copia.perfil &&
+                                            !copia.conta &&
+                                            !copia.account
+                                        ) {
+
+                                            copia.usuario =
+                                                conta.perfil;
+                                        }
+
+
+                                        copia.__arquivo =
+                                            arquivo;
+
+
+                                        return copia;
+
+                                    }
+                                );
+
+                            }
+
+                            catch (erro) {
+
+                                console.warn(
+                                    `Erro ao carregar ${arquivo}:`,
+                                    erro
+                                );
+
+                                return [];
+                            }
+
+                        }
+
+                    )
+                );
+
+
+            /* =================================================
+               JUNTAR TODOS
+            ================================================= */
+
+            reels =
+                resultados.flat();
+
+
+            /* =================================================
+               PREPARAR
+            ================================================= */
+
+            prepararReels();
+
+
+            /* =================================================
+               CONTAS
+            ================================================= */
+
+            atualizarContas();
+
+
+            /* =================================================
+               HORAS
+            ================================================= */
+
+            carregarHoras();
+
+
+            /* =================================================
+               FILTROS
+            ================================================= */
+
+            aplicarFiltros();
+
+
+            /* =================================================
+               STATUS
+            ================================================= */
+
+            mostrarStatus(
+                `${reels.length} Reels carregados de ${contasConfiguradas.length} conta(s)`
+            );
+
+
+            console.log(
+                "Config carregado:",
+                config
+            );
+
+
+            console.log(
+                "Contas:",
+                contasConfiguradas
+            );
+
+
+            console.log(
+                "Reels carregados:",
+                reels.length
+            );
+
+        }
+
+        catch (erro) {
+
+            console.error(
+                erro
+            );
+
+
+            mostrarStatus(
+                "Erro ao carregar dados"
+            );
+
+
+            document.getElementById(
+                "tableBody"
+            ).innerHTML = `
+
+                <tr>
+
+                    <td
+                        colspan="8"
+                        class="empty"
+                    >
+
+                        Erro ao carregar os dados.
+
+                        <br><br>
+
+                        <small>
+                            ${erro.message}
+                        </small>
+
+                    </td>
+
+                </tr>
+
+            `;
+        }
+    }
+
+
+    /* =====================================================
+       INICIAR
+    ===================================================== */
+
+    carregar();
+
+</script>
+
+</body>
+</html>
