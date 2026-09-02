@@ -1,11 +1,6 @@
 {
   "contas": [
     {
-      "perfil": "carla_ferreiratgs",
-      "arquivo_json": "carla_ferreiratgs_reels.json",
-      "arquivo_csv": "carla_ferreiratgs_reels.csv"
-    },
-    {
       "perfil": "vivian_gaspariny019",
       "arquivo_json": "vivian_gaspariny019_reels.json",
       "arquivo_csv": "vivian_gaspariny019_reels.csv"
